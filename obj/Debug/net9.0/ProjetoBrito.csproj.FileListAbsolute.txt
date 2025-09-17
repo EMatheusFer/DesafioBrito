@@ -1,0 +1,14 @@
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\bin\Debug\net9.0\ProjetoBrito.exe
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\bin\Debug\net9.0\ProjetoBrito.deps.json
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\bin\Debug\net9.0\ProjetoBrito.runtimeconfig.json
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\bin\Debug\net9.0\ProjetoBrito.dll
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\bin\Debug\net9.0\ProjetoBrito.pdb
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.AssemblyInfoInputs.cache
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.AssemblyInfo.cs
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.csproj.CoreCompileInputs.cache
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.dll
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\refint\ProjetoBrito.dll
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.pdb
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ProjetoBrito.genruntimeconfig.cache
+c:\Users\Mathe\OneDrive\Área de Trabalho\Teste\ProjetoBrito\obj\Debug\net9.0\ref\ProjetoBrito.dll
