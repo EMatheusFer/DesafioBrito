@@ -9,7 +9,7 @@ namespace CadastroProdutos
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=CadastroProdutosDB;Username=seu_user;Password=sua_senha");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=CadastroProdutosDB;Username=postgres;Password=123456");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

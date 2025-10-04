@@ -13,9 +13,6 @@ namespace CadastroProdutos
             _db = db;
         }
 
-        // ======================
-        // CREATE
-        // ======================
         public void CriarProduto()
         {
             Console.Clear();
@@ -94,7 +91,7 @@ namespace CadastroProdutos
                 Categoria = categoria
             };
 
-            // RN05 - calcula PrecoVenda com base na margem da categoria
+        
             try
             {
                 produto.CalcularPrecoVenda();
@@ -113,9 +110,7 @@ namespace CadastroProdutos
             Console.ReadLine();
         }
 
-        // ======================
-        // READ / LISTAGENS
-        // ======================
+
         public void ListarProdutosAtivos()
         {
             Console.Clear();
@@ -216,9 +211,7 @@ namespace CadastroProdutos
             Console.ReadLine();
         }
 
-        // ======================
-        // UPDATE (localizar por SKU)
-        // ======================
+
         public void EditarProduto()
         {
             Console.Clear();
@@ -291,7 +284,7 @@ namespace CadastroProdutos
                 }
             }
 
-            // Alterar categoria (opcional)
+    
             Console.Write("Deseja alterar a categoria? (s/n): ");
             var trocarCat = Console.ReadLine()?.Trim().ToLower();
             if (trocarCat == "s")
@@ -327,10 +320,10 @@ namespace CadastroProdutos
                 produto.Categoria = novaCategoria;
             }
 
-            // Recalcula PrecoVenda (RN05)
+
             try
             {
-                // garante que a categoria esteja carregada
+
                 if (produto.Categoria == null)
                     produto.Categoria = _db.Categorias.IgnoreQueryFilters().FirstOrDefault(c => c.Id == produto.CategoriaId);
 
@@ -343,7 +336,7 @@ namespace CadastroProdutos
                 return;
             }
 
-            // Reativar se inativo
+  
             if (!produto.Ativo)
             {
                 Console.Write("Esse produto está inativo. Deseja reativá-lo? (s/n): ");
@@ -361,9 +354,7 @@ namespace CadastroProdutos
             Console.ReadLine();
         }
 
-        // ======================
-        // DELETE (LÓGICO) por SKU
-        // ======================
+
         public void ExcluirProduto()
         {
             Console.Clear();
@@ -401,9 +392,7 @@ namespace CadastroProdutos
             Console.ReadLine();
         }
 
-        // ======================
-        // BUSCAS
-        // ======================
+
         public void BuscarProdutoPorSku()
         {
             Console.Clear();
