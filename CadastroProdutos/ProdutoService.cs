@@ -30,7 +30,7 @@ namespace CadastroProdutos
                 return;
             }
 
-            // RN02 - SKU único (considera inativos)
+            
             if (_db.Produtos.IgnoreQueryFilters().Any(p => p.SKU.ToLower() == sku.ToLower()))
             {
                 Console.WriteLine("SKU já cadastrado!");
@@ -38,7 +38,7 @@ namespace CadastroProdutos
                 return;
             }
 
-            // RN03 - Nome único (considera inativos)
+            
             if (_db.Produtos.IgnoreQueryFilters().Any(p => p.Nome.ToLower() == nome.ToLower()))
             {
                 Console.WriteLine("Produto com esse nome já existe!");
@@ -54,7 +54,7 @@ namespace CadastroProdutos
                 return;
             }
 
-            // Selecionar categoria (apenas ativas listadas)
+            
             var categorias = _db.Categorias.ToList();
             if (!categorias.Any())
             {
@@ -255,7 +255,7 @@ namespace CadastroProdutos
                 produto.SKU = novoSku;
             }
 
-            // Alterar Nome
+           
             Console.Write($"Novo Nome ({produto.Nome}): ");
             var novoNome = Console.ReadLine()?.Trim();
             if (!string.IsNullOrEmpty(novoNome) && !novoNome.Equals(produto.Nome, StringComparison.OrdinalIgnoreCase))
@@ -269,7 +269,7 @@ namespace CadastroProdutos
                 produto.Nome = novoNome;
             }
 
-            // Alterar Preço de Custo
+           
             Console.Write($"Novo Preço de custo ({produto.PrecoCusto}): ");
             var precoInput = Console.ReadLine()?.Trim();
             if (!string.IsNullOrEmpty(precoInput))

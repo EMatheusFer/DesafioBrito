@@ -67,7 +67,7 @@ namespace CadastroProdutos
             Console.WriteLine("\nSaindo do sistema... Até logo!");
         }
 
-        // ---------------- MENU DE CADASTROS ----------------
+        
         private static void MenuCadastros(CategoriaService categoriaService, ProdutoService produtoService)
         {
             bool voltar = false;
@@ -100,7 +100,7 @@ namespace CadastroProdutos
             }
         }
 
-        // ---------------- MENU DE EDIÇÃO ----------------
+        
         private static void MenuEdicao(CategoriaService categoriaService, ProdutoService produtoService)
         {
             bool voltar = false;
@@ -133,7 +133,7 @@ namespace CadastroProdutos
             }
         }
 
-        // ---------------- MENU DE EXCLUSÃO ----------------
+        
         private static void MenuExclusao(CategoriaService categoriaService, ProdutoService produtoService)
         {
             bool voltar = false;
@@ -166,7 +166,7 @@ namespace CadastroProdutos
             }
         }
 
-        // ---------------- MENU DE LISTAGEM ----------------
+        
         private static void MenuListagem(CategoriaService categoriaService, ProdutoService produtoService)
         {
             bool voltar = false;
@@ -203,7 +203,7 @@ namespace CadastroProdutos
             }
         }
 
-        // ---------------- MENU DE BUSCA ----------------
+        
         private static void MenuBusca(CategoriaService categoriaService, ProdutoService produtoService)
         {
             bool voltar = false;
@@ -232,7 +232,7 @@ namespace CadastroProdutos
             }
         }
 
-        // ---------------- UTILITÁRIO ----------------
+        
         private static void MensagemVoltar(string mensagem)
         {
             Console.WriteLine($"\n{mensagem}");
