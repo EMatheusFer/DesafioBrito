@@ -42,13 +42,13 @@ namespace CadastroProdutos
             decimal margemLucro;
             while (true)
             {
-                Console.Write("Margem de lucro (ex: 0.2 para 20%): ");
+                Console.Write("Margem de lucro (ex: 0,2 para 20%): ");
                 var input = Console.ReadLine()?.Trim();
 
-                if (decimal.TryParse(input, out margemLucro) && margemLucro >= 0 && margemLucro <= 1)
+                if (decimal.TryParse(input, out margemLucro) && margemLucro >= 0)
                     break;
 
-                Console.WriteLine("Valor inválido! Digite como decimal entre 0 e 1 (ex: 0.15).");
+                Console.WriteLine("Valor inválido! Digite como decimal maior que 0 (ex: 0,15).");
             }
 
             var categoria = new Categoria
@@ -174,11 +174,28 @@ namespace CadastroProdutos
                 return;
             }
 
+
+
             // Editar descrição
             Console.Write($"Nova descrição ({categoria.Descricao}): ");
             var novaDescricao = Console.ReadLine()?.Trim();
             if (!string.IsNullOrEmpty(novaDescricao))
                 categoria.Descricao = novaDescricao;
+                
+            if (!string.IsNullOrEmpty(categoria.Descricao))
+            {
+                bool descricaoDuplicada = _db.Categorias
+                    .IgnoreQueryFilters()
+                    .Any(c => c.Descricao.ToLower() == categoria.Descricao.ToLower() && c.Id != categoria.Id);
+
+                if (descricaoDuplicada)
+                {
+                    Console.WriteLine("Já existe uma categoria com essa descrição!");
+                    Console.ReadLine();
+                    return;
+                }
+            }
+            
 
             // Editar margem de lucro
             while (true)
@@ -189,15 +206,17 @@ namespace CadastroProdutos
                 if (string.IsNullOrEmpty(input))
                     break; // mantém valor atual
 
-                if (decimal.TryParse(input, out var novaMargem) && novaMargem >= 0 && novaMargem <= 1)
+                if (decimal.TryParse(input, out var novaMargem) && novaMargem >= 0)
                 {
                     categoria.MargemLucro = novaMargem;
                     break;
                 }
 
-                Console.WriteLine("Valor inválido! Digite como decimal entre 0 e 1 (ex: 0.15) ou ENTER para manter.");
+                Console.WriteLine("Valor inválido! Digite como decimal maior que 0 (ex: 0,15) ou ENTER para manter.");
             }
 
+
+            
             // Reativar categoria inativa
             if (!categoria.Ativo)
             {
@@ -259,7 +278,7 @@ namespace CadastroProdutos
             }
 
             categoria.Ativo = false;
-            categoria.DataInativacao = DateTime.Now;
+            categoria.DataInativacao = DateTime.UtcNow;
             _db.SaveChanges();
 
             Console.WriteLine("Categoria inativada com sucesso!");

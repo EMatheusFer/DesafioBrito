@@ -9,7 +9,10 @@ namespace CadastroProdutos
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=CadastroProdutosDB;Username=postgres;Password=123456");
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=CadastroProdutosDB;Username=postgres;Password=123456");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,7 +44,7 @@ namespace CadastroProdutos
                 .HasOne(p => p.Categoria)
                 .WithMany(c => c.Produtos)
                 .HasForeignKey(p => p.CategoriaId)
-                .OnDelete(DeleteBehavior.Restrict); // impede exclusão física de categoria com produtos
+                .OnDelete(DeleteBehavior.Restrict); 
         }
 
         public IQueryable<Categoria> CategoriasInativas()

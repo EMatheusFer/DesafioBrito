@@ -91,7 +91,7 @@ namespace CadastroProdutos
                 Categoria = categoria
             };
 
-        
+
             try
             {
                 produto.CalcularPrecoVenda();
@@ -284,7 +284,7 @@ namespace CadastroProdutos
                 }
             }
 
-    
+
             Console.Write("Deseja alterar a categoria? (s/n): ");
             var trocarCat = Console.ReadLine()?.Trim().ToLower();
             if (trocarCat == "s")
@@ -336,7 +336,12 @@ namespace CadastroProdutos
                 return;
             }
 
-  
+            if (trocarCat != "s" && produto.Categoria != null)
+            {
+                _db.Entry(produto.Categoria).State = EntityState.Unchanged;
+            }
+
+
             if (!produto.Ativo)
             {
                 Console.Write("Esse produto está inativo. Deseja reativá-lo? (s/n): ");
@@ -385,7 +390,7 @@ namespace CadastroProdutos
             }
 
             produto.Ativo = false;
-            produto.DataInativacao = DateTime.Now;
+            produto.DataInativacao = DateTime.UtcNow;
             _db.SaveChanges();
 
             Console.WriteLine("Produto inativado com sucesso!");

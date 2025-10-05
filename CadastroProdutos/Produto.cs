@@ -15,7 +15,7 @@ namespace CadastroProdutos
         public decimal PrecoCusto { get; set; }        
 
         public decimal PrecoVenda { get; private set; } 
-        public DateTime DataCadastro { get; set; } = DateTime.Now;
+        public DateTime DataCadastro { get; set; } = DateTime.UtcNow;
 
         public bool Ativo { get; set; } = true;
 

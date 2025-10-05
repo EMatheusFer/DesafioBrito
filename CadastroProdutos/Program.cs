@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Linq;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore; 
 
 namespace CadastroProdutos
 {
@@ -8,9 +9,14 @@ namespace CadastroProdutos
         static void Main(string[] args)
         {
             using var db = new AppDbContext();
-            bool rodando = true;
+           
+            var categoriaService = new CategoriaService(db);
+            var produtoService = new ProdutoService(db);
+            var exportService = new ExportService(db);
 
-            while (rodando)
+            bool sair = false;
+
+            while (!sair)
             {
                 Console.Clear();
                 Console.WriteLine("=== MENU PRINCIPAL ===");
@@ -21,206 +27,216 @@ namespace CadastroProdutos
                 Console.WriteLine("5 - Busca");
                 Console.WriteLine("6 - Exportar Produtos CSV");
                 Console.WriteLine("7 - Exportar Categorias CSV");
-                Console.WriteLine("8 - Sair");
-                Console.Write("Escolha uma opção: ");
+                Console.WriteLine("0 - Sair");
+                Console.Write("\nEscolha uma opção: ");
 
-                var opcao = Console.ReadLine();
+                string? opc = Console.ReadLine()?.Trim();
 
-                switch (opcao)
+                switch (opc)
                 {
                     case "1":
-                        MostrarMenuCadastros(db);
+                        MenuCadastros(categoriaService, produtoService);
                         break;
                     case "2":
-                        MostrarMenuEdicao(db);
+                        MenuEdicao(categoriaService, produtoService);
                         break;
                     case "3":
-                        MostrarMenuExclusao(db);
+                        MenuExclusao(categoriaService, produtoService);
                         break;
                     case "4":
-                        MostrarMenuListagem(db);
+                        MenuListagem(categoriaService, produtoService);
                         break;
                     case "5":
-                        MostrarMenuBusca(db);
+                        MenuBusca(categoriaService, produtoService);
                         break;
                     case "6":
-                        ExportarProdutosCSV(db);
+                        exportService.ExportarProdutosParaCsv();
                         break;
                     case "7":
-                        ExportarCategoriasCSV(db);
+                        exportService.ExportarCategoriasParaCsv();
                         break;
-                    case "8":
-                        rodando = false;
+                    case "0":
+                        sair = true;
                         break;
                     default:
-                        Console.WriteLine("Opção inválida! Pressione ENTER para continuar.");
-                        Console.ReadLine();
+                        MensagemVoltar("Opção inválida!");
                         break;
                 }
             }
+
+            Console.WriteLine("\nSaindo do sistema... Até logo!");
         }
 
-        static void MostrarMenuCadastros(AppDbContext db)
+        // ---------------- MENU DE CADASTROS ----------------
+        private static void MenuCadastros(CategoriaService categoriaService, ProdutoService produtoService)
         {
-            while (true)
+            bool voltar = false;
+
+            while (!voltar)
             {
                 Console.Clear();
                 Console.WriteLine("=== CADASTROS ===");
                 Console.WriteLine("1 - Categorias");
                 Console.WriteLine("2 - Produtos");
-                Console.WriteLine("3 - Voltar");
-                Console.Write("Escolha uma opção: ");
+                Console.WriteLine("0 - Voltar");
+                Console.Write("\nEscolha: ");
+                string? opc = Console.ReadLine()?.Trim();
 
-                var opcao = Console.ReadLine();
-
-                switch (opcao)
+                switch (opc)
                 {
                     case "1":
-                        CadastrarCategoria(db);
+                        categoriaService.CriarCategoria();
                         break;
                     case "2":
-                        CadastrarProduto(db);
+                        produtoService.CriarProduto();
                         break;
-                    case "3":
-                        return; 
+                    case "0":
+                        voltar = true;
+                        break;
                     default:
-                        Console.WriteLine("Opção inválida! Pressione ENTER para continuar.");
-                        Console.ReadLine();
+                        MensagemVoltar("Opção inválida!");
                         break;
                 }
             }
         }
 
-        static void CadastrarCategoria(AppDbContext db)
+        // ---------------- MENU DE EDIÇÃO ----------------
+        private static void MenuEdicao(CategoriaService categoriaService, ProdutoService produtoService)
         {
-            Console.Clear();
-            Console.WriteLine("=== CADASTRAR CATEGORIA ===");
+            bool voltar = false;
 
-        
-            Console.Write("Descrição: ");
-            var descricao = Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrEmpty(descricao))
+            while (!voltar)
             {
-                Console.WriteLine("Descrição inválida! Pressione ENTER para voltar.");
-                Console.ReadLine();
-                return;
-            }
+                Console.Clear();
+                Console.WriteLine("=== EDIÇÃO ===");
+                Console.WriteLine("1 - Categorias");
+                Console.WriteLine("2 - Produtos");
+                Console.WriteLine("0 - Voltar");
+                Console.Write("\nEscolha: ");
+                string? opc = Console.ReadLine()?.Trim();
 
-         
-            if (db.Categorias.IgnoreQueryFilters().Any(c => c.Descricao.ToLower() == descricao.ToLower()))
-            {
-                Console.WriteLine("Categoria já existe! Pressione ENTER para voltar.");
-                Console.ReadLine();
-                return;
-            }
-
-            
-            decimal margemLucro;
-            while (true)
-            {
-                Console.Write("Margem de lucro (ex: 0.2 para 20%): ");
-                var input = Console.ReadLine()?.Trim();
-
-                if (decimal.TryParse(input, out margemLucro) && margemLucro >= 0)
+                switch (opc)
                 {
-                    break; 
-                }
-                else
-                {
-                    Console.WriteLine("Valor inválido! Digite como decimal (ex: 0.15 para 15%).");
+                    case "1":
+                        categoriaService.EditarCategoria();
+                        break;
+                    case "2":
+                        produtoService.EditarProduto();
+                        break;
+                    case "0":
+                        voltar = true;
+                        break;
+                    default:
+                        MensagemVoltar("Opção inválida!");
+                        break;
                 }
             }
-
-            
-            var categoria = new Categoria
-            {
-                Descricao = descricao,
-                MargemLucro = margemLucro
-            };
-
-            db.Categorias.Add(categoria);
-            db.SaveChanges();
-
-            Console.WriteLine("Categoria cadastrada com sucesso! Pressione ENTER.");
-            Console.ReadLine();
         }
-        static void CadastrarProduto(AppDbContext db)
+
+        // ---------------- MENU DE EXCLUSÃO ----------------
+        private static void MenuExclusao(CategoriaService categoriaService, ProdutoService produtoService)
         {
-            Console.Clear();
-            Console.WriteLine("=== CADASTRAR PRODUTO ===");
+            bool voltar = false;
 
-            Console.Write("SKU: ");
-            var sku = Console.ReadLine()?.Trim();
-
-            Console.Write("Nome: ");
-            var nome = Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrEmpty(sku) || string.IsNullOrEmpty(nome))
+            while (!voltar)
             {
-                Console.WriteLine("SKU ou Nome inválido! Pressione ENTER.");
-                Console.ReadLine();
-                return;
+                Console.Clear();
+                Console.WriteLine("=== EXCLUSÃO ===");
+                Console.WriteLine("1 - Categorias");
+                Console.WriteLine("2 - Produtos");
+                Console.WriteLine("0 - Voltar");
+                Console.Write("\nEscolha: ");
+                string? opc = Console.ReadLine()?.Trim();
+
+                switch (opc)
+                {
+                    case "1":
+                        categoriaService.ExcluirCategoria();
+                        break;
+                    case "2":
+                        produtoService.ExcluirProduto();
+                        break;
+                    case "0":
+                        voltar = true;
+                        break;
+                    default:
+                        MensagemVoltar("Opção inválida!");
+                        break;
+                }
             }
+        }
 
-            // Verifica duplicidade (RN02 e RN03)
-            if (db.Produtos.IgnoreQueryFilters().Any(p => p.SKU.ToLower() == sku.ToLower()))
+        // ---------------- MENU DE LISTAGEM ----------------
+        private static void MenuListagem(CategoriaService categoriaService, ProdutoService produtoService)
+        {
+            bool voltar = false;
+
+            while (!voltar)
             {
-                Console.WriteLine("SKU já cadastrado! Pressione ENTER.");
-                Console.ReadLine();
-                return;
+                Console.Clear();
+                Console.WriteLine("=== LISTAGENS ===");
+                Console.WriteLine("1 - Categorias Ativas");
+                Console.WriteLine("2 - Categorias Inativas");
+                Console.WriteLine("3 - Categorias sem vínculo");
+                Console.WriteLine("4 - Todas as Categorias");
+                Console.WriteLine("5 - Produtos Ativos");
+                Console.WriteLine("6 - Produtos Inativos");
+                Console.WriteLine("7 - Produtos sem Categoria");
+                Console.WriteLine("8 - Todos os Produtos");
+                Console.WriteLine("0 - Voltar");
+                Console.Write("\nEscolha: ");
+                string? opc = Console.ReadLine()?.Trim();
+
+                switch (opc)
+                {
+                    case "1": categoriaService.ListarCategoriasAtivas(); break;
+                    case "2": categoriaService.ListarCategoriasInativas(); break;
+                    case "3": categoriaService.ListarCategoriasSemVinculo(); break;
+                    case "4": categoriaService.ListarTodasCategorias(); break;
+                    case "5": produtoService.ListarProdutosAtivos(); break;
+                    case "6": produtoService.ListarProdutosInativos(); break;
+                    case "7": produtoService.ListarProdutosSemCategoria(); break;
+                    case "8": produtoService.ListarTodosProdutos(); break;
+                    case "0": voltar = true; break;
+                    default: MensagemVoltar("Opção inválida!"); break;
+                }
             }
-            if (db.Produtos.IgnoreQueryFilters().Any(p => p.Nome.ToLower() == nome.ToLower()))
+        }
+
+        // ---------------- MENU DE BUSCA ----------------
+        private static void MenuBusca(CategoriaService categoriaService, ProdutoService produtoService)
+        {
+            bool voltar = false;
+
+            while (!voltar)
             {
-                Console.WriteLine("Produto com este nome já existe! Pressione ENTER.");
-                Console.ReadLine();
-                return;
+                Console.Clear();
+                Console.WriteLine("=== BUSCAS ===");
+                Console.WriteLine("1 - Categoria por código");
+                Console.WriteLine("2 - Categoria por nome");
+                Console.WriteLine("3 - Produto por SKU");
+                Console.WriteLine("4 - Produto por nome");
+                Console.WriteLine("0 - Voltar");
+                Console.Write("\nEscolha: ");
+                string? opc = Console.ReadLine()?.Trim();
+
+                switch (opc)
+                {
+                    case "1": categoriaService.BuscarCategoriaPorId(); break;
+                    case "2": categoriaService.BuscarCategoriaPorNome(); break;
+                    case "3": produtoService.BuscarProdutoPorSku(); break;
+                    case "4": produtoService.BuscarProdutoPorNome(); break;
+                    case "0": voltar = true; break;
+                    default: MensagemVoltar("Opção inválida!"); break;
+                }
             }
+        }
 
-            Console.Write("Preço de custo: ");
-            if (!decimal.TryParse(Console.ReadLine(), out var precoCusto))
-            {
-                Console.WriteLine("Preço inválido! Pressione ENTER.");
-                Console.ReadLine();
-                return;
-            }
-
-            // Escolher categoria
-            var categorias = db.Categorias.ToList();
-            if (!categorias.Any())
-            {
-                Console.WriteLine("Não há categorias cadastradas. Pressione ENTER.");
-                Console.ReadLine();
-                return;
-            }
-
-            Console.WriteLine("Selecione a categoria:");
-            for (int i = 0; i < categorias.Count; i++)
-            {
-                Console.WriteLine($"{i + 1} - {categorias[i].Descricao}");
-            }
-
-            if (!int.TryParse(Console.ReadLine(), out var indice) || indice < 1 || indice > categorias.Count)
-            {
-                Console.WriteLine("Categoria inválida! Pressione ENTER.");
-                Console.ReadLine();
-                return;
-            }
-
-            var produto = new Produto
-            {
-                SKU = sku,
-                Nome = nome,
-                PrecoCusto = precoCusto,
-                CategoriaId = categorias[indice - 1].Id
-            };
-
-            produto.CalcularPrecoVenda(); // RN05
-
-            db.Produtos.Add(produto);
-            db.SaveChanges();
-
-            Console.WriteLine("Produto cadastrado com sucesso! Pressione ENTER.");
+        // ---------------- UTILITÁRIO ----------------
+        private static void MensagemVoltar(string mensagem)
+        {
+            Console.WriteLine($"\n{mensagem}");
+            Console.WriteLine("Pressione ENTER para continuar...");
             Console.ReadLine();
         }
     }
